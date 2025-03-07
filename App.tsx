@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import TaskCard from "./components/TaskCard";
 import CreateTaskModal from "./components/CreateTaskModal";
 import axios from "axios";
@@ -34,11 +34,12 @@ export default function App() {
             <Text style={styles.title}>TODO List</Text>
             <Text style={styles.subtitle}>6th March 2025</Text>
 
-            <ScrollView style={styles.scrollView}>
-                {tasks.map((task, index) => (
-                    <TaskCard key={index} task={task} />
-                ))}
-            </ScrollView>
+            <FlatList
+                style={styles.scrollView}
+                data={tasks} // Список даних для відображення
+                renderItem={({ item }) => <TaskCard task={item} />} // Рендер кожного елементу
+                keyExtractor={(item, index) => index.toString()} // Унікальний ключ для кожного елемента
+            />
 
             <Pressable style={styles.btn} onPress={() => setIsModalVisible(true)}>
                 <Text style={styles.btnTitle}>+</Text>
