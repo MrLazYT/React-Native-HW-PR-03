@@ -8,7 +8,13 @@ export default function TaskCard({ task }: any) {
     return (
         <View>
             <Pressable
-                style={styles.container}
+                style={
+                    task.priority == 0 || task.priority == undefined
+                        ? styles.container
+                        : task.priority == 1
+                        ? styles.container1
+                        : styles.container2
+                }
                 onPress={() => {
                     setIsCompleted(!isCompleted);
                 }}
@@ -26,6 +32,24 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         margin: 5,
         borderColor: "lightgray",
+        borderWidth: 2,
+        borderRadius: 7,
+    },
+
+    container1: {
+        flex: 1,
+        flexDirection: "row",
+        margin: 5,
+        borderColor: "yellow",
+        borderWidth: 2,
+        borderRadius: 7,
+    },
+
+    container2: {
+        flex: 1,
+        flexDirection: "row",
+        margin: 5,
+        borderColor: "red",
         borderWidth: 2,
         borderRadius: 7,
     },

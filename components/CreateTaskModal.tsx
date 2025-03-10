@@ -1,28 +1,60 @@
 import { useState } from "react";
-import { Button, Modal, Text, TextInput, StyleSheet, View, Pressable } from "react-native";
+import { Controller, useForm } from "react-hook-form";
+import { Picker } from "@react-native-picker/picker";
+import { Button, Modal, Text, TextInput, StyleSheet, View, Pressable, Alert } from "react-native";
 import { Task } from "../App";
 
 export default function CreateTaskModal({ onClose, onAddTask, isVisible = false }: any) {
     const [taskTitle, setTaskTitle] = useState<string>("");
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            todo: "",
+            completed: false,
+            priority: 0,
+        },
+    });
+
+    const onSubmit = (task: Task) => {
+        if (task.todo != "") {
+            onAddTask(task);
+            onClose();
+        } else {
+            Alert.alert("Title cannot be empty", "You need to write title of the task to continue.");
+        }
+    };
 
     return (
         <Modal visible={isVisible} animationType="slide">
             <View style={styles.container}>
                 <Text style={styles.title}>Creating Task</Text>
-                <TextInput style={styles.input} onChangeText={setTaskTitle} placeholder="Enter title" />
 
-                <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                        const task: Task = {
-                            todo: taskTitle,
-                            complited: false,
-                        };
+                <Controller
+                    control={control}
+                    name="todo"
+                    render={({ field: { onChange, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={onChange}
+                            placeholder="Enter title"
+                            value={value}
+                        />
+                    )}
+                />
 
-                        onClose();
-                        onAddTask(task);
-                    }}
-                >
+                <Text>Select priority:</Text>
+                <Controller
+                    control={control}
+                    name="priority"
+                    render={({ field: { onChange, value } }) => (
+                        <Picker style={styles.picker} selectedValue={value} onValueChange={onChange}>
+                            <Picker.Item label="Not Specified" value="0" />
+                            <Picker.Item label="Medium Priority" value="1" />
+                            <Picker.Item label="High Priority" value="2" />
+                        </Picker>
+                    )}
+                />
+
+                <Pressable style={styles.btn} onPress={handleSubmit(onSubmit)}>
                     <Text style={styles.btnTitle}>Create Task</Text>
                 </Pressable>
             </View>
@@ -36,6 +68,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
+    },
+
+    picker: {
+        width: 200,
     },
 
     title: {

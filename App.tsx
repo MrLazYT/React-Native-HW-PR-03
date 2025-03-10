@@ -7,7 +7,8 @@ import axios from "axios";
 
 export type Task = {
     todo: string;
-    complited: boolean;
+    completed: boolean;
+    priority: Number;
 };
 
 export default function App() {
@@ -36,9 +37,9 @@ export default function App() {
 
             <FlatList
                 style={styles.scrollView}
-                data={tasks} // Список даних для відображення
-                renderItem={({ item }) => <TaskCard task={item} />} // Рендер кожного елементу
-                keyExtractor={(item, index) => index.toString()} // Унікальний ключ для кожного елемента
+                data={tasks}
+                renderItem={({ item }) => <TaskCard task={item} />}
+                keyExtractor={(item, index) => index.toString()}
             />
 
             <Pressable style={styles.btn} onPress={() => setIsModalVisible(true)}>
@@ -71,7 +72,6 @@ const styles = StyleSheet.create({
     },
 
     scrollView: {
-        // backgroundColor: "black",
         width: "100%",
         marginTop: 20,
         marginBottom: 20,
