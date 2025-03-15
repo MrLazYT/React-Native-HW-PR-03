@@ -1,4 +1,4 @@
-import { View, Text, Switch,  } from "react-native";
+import { View, Text, Switch } from "react-native";
 
 export default function SettingComponent({ title }: SettingTypeComponentProps) {
     return (
@@ -8,7 +8,3 @@ export default function SettingComponent({ title }: SettingTypeComponentProps) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-
-});
