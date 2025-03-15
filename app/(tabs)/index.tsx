@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Button, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import TaskCard from "./components/TaskCard";
-import CreateTaskModal from "./components/CreateTaskModal";
 import axios from "axios";
+import TaskCard from "../../components/TaskCard";
+import CreateTaskModal from "../../components/CreateTaskModal";
 
 export type Task = {
     todo: string;
@@ -11,7 +11,7 @@ export type Task = {
     priority: Number;
 };
 
-export default function App() {
+export default function Settings() {
     const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        marginTop: 50,
+        backgroundColor: "white",
         padding: 20,
     },
 
