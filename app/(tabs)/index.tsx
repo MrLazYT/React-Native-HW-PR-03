@@ -4,30 +4,37 @@ import { Button, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text
 import axios from "axios";
 import TaskCard from "../../components/TaskCard";
 import CreateTaskModal from "../../components/CreateTaskModal";
-
-export type Task = {
-    todo: string;
-    completed: boolean;
-    priority: Number;
-};
+import { useSQLiteContext } from "expo-sqlite";
+import { addTask, getTasks, init } from "../../store/sqlite";
 
 export default function Settings() {
+    const db = useSQLiteContext();
     const [tasks, setTasks] = useState<Task[]>([]);
 
+    // useEffect(() => {
+    //     axios
+    //         .get("https://dummyjson.com/todos")
+    //         .then((response) => {
+    //             setTasks((prevTasks) => [...prevTasks, ...response.data.todos]); // Оновлюємо стан
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching tasks:", error);
+    //         });
+    // }, []);
+
+    async function setup() {
+        await init();
+        setTasks(await getTasks());
+    }
+
     useEffect(() => {
-        axios
-            .get("https://dummyjson.com/todos")
-            .then((response) => {
-                setTasks((prevTasks) => [...prevTasks, ...response.data.todos]); // Оновлюємо стан
-            })
-            .catch((error) => {
-                console.error("Error fetching tasks:", error);
-            });
+        setup();
     }, []);
 
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const addTask = (task: Task) => {
+    const addTaskHandler = async (task: Task) => {
         setTasks([...tasks, task]);
+        await addTask(task);
     };
 
     return (
@@ -46,7 +53,11 @@ export default function Settings() {
                 <Text style={styles.btnTitle}>+</Text>
             </Pressable>
 
-            <CreateTaskModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} onAddTask={addTask} />
+            <CreateTaskModal
+                isVisible={isModalVisible}
+                onClose={() => setIsModalVisible(false)}
+                onAddTask={addTaskHandler}
+            />
         </SafeAreaView>
     );
 }

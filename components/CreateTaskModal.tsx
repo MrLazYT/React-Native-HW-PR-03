@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { Button, Modal, Text, TextInput, StyleSheet, View, Pressable, Alert } from "react-native";
-import { Task } from "../App";
 
 export default function CreateTaskModal({ onClose, onAddTask, isVisible = false }: any) {
     const [taskTitle, setTaskTitle] = useState<string>("");
@@ -14,9 +13,9 @@ export default function CreateTaskModal({ onClose, onAddTask, isVisible = false 
         },
     });
 
-    const onSubmit = (task: Task) => {
+    const onSubmit = async (task: Task) => {
         if (task.todo != "") {
-            onAddTask(task);
+            await onAddTask(task);
             onClose();
         } else {
             Alert.alert("Title cannot be empty", "You need to write title of the task to continue.");
