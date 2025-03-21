@@ -1,14 +1,17 @@
+import { tasks } from "../../db/schema";
+import { useDispatch } from "react-redux";
+import { plus } from "../slices/menuSlice";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import TaskCard from "../../components/TaskCard";
 import CreateTaskModal from "../../components/CreateTaskModal";
-import { tasks } from "../../db/schema";
 import { addTask, getTasks, useDatabase } from "../../db/tasksService";
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text } from "react-native";
 
 export default function Settings() {
     const { success, error } = useDatabase();
     const [items, setItems] = useState<(typeof tasks.$inferSelect)[] | null>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
     async function update() {
         const taskList = await getTasks();
@@ -16,9 +19,18 @@ export default function Settings() {
         setItems(taskList);
     }
 
+    function updateUncompletedTaskCount() {
+        for (let task of items!) {
+            if (task.completed !== 1) {
+                dispatch(plus());
+            }
+        }
+    }
+
     useEffect(() => {
         (async () => {
             await update();
+            updateUncompletedTaskCount();
         })();
     }, []);
 
@@ -40,6 +52,8 @@ export default function Settings() {
     const addTaskHandler = async (task: Task) => {
         await addTask(task);
         await update();
+
+        dispatch(plus());
     };
 
     return (
@@ -51,7 +65,7 @@ export default function Settings() {
                     style={styles.scrollView}
                     data={items}
                     renderItem={({ item }) => <TaskCard task={item} />}
-                    keyExtractor={(index) => index.toString()}
+                    keyExtractor={(_, index) => index.toString()}
                 />
             ) : (
                 <Text style={styles.emptyTaskList}>There's no tasks yet. Let's create one.</Text>
