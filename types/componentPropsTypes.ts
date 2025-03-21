@@ -1,4 +1,5 @@
 type SettingTypeComponentProps = {
+    tag: string;
     title: string;
 };
 

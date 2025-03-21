@@ -1,53 +1,61 @@
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import axios from "axios";
+import { FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import TaskCard from "../../components/TaskCard";
 import CreateTaskModal from "../../components/CreateTaskModal";
-import { useSQLiteContext } from "expo-sqlite";
-import { addTask, getTasks, init } from "../../store/sqlite";
+import { tasks } from "../../db/schema";
+import { addTask, getTasks, useDatabase } from "../../db/tasksService";
 
 export default function Settings() {
-    const db = useSQLiteContext();
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const { success, error } = useDatabase();
+    const [items, setItems] = useState<(typeof tasks.$inferSelect)[] | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     axios
-    //         .get("https://dummyjson.com/todos")
-    //         .then((response) => {
-    //             setTasks((prevTasks) => [...prevTasks, ...response.data.todos]); // Оновлюємо стан
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching tasks:", error);
-    //         });
-    // }, []);
+    async function update() {
+        const taskList = await getTasks();
 
-    async function setup() {
-        await init();
-        setTasks(await getTasks());
+        setItems(taskList);
     }
 
     useEffect(() => {
-        setup();
+        (async () => {
+            await update();
+        })();
     }, []);
 
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    if (error) {
+        return (
+            <SafeAreaView>
+                <Text>Migration error: {error.message}</Text>
+            </SafeAreaView>
+        );
+    }
+    if (!success) {
+        return (
+            <SafeAreaView>
+                <Text>Migration is in progress...</Text>
+            </SafeAreaView>
+        );
+    }
+
     const addTaskHandler = async (task: Task) => {
-        setTasks([...tasks, task]);
         await addTask(task);
+        await update();
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>TODO List</Text>
             <Text style={styles.subtitle}>6th March 2025</Text>
-
-            <FlatList
-                style={styles.scrollView}
-                data={tasks}
-                renderItem={({ item }) => <TaskCard task={item} />}
-                keyExtractor={(item, index) => index.toString()}
-            />
+            {items !== null && items!.length !== 0 ? (
+                <FlatList
+                    style={styles.scrollView}
+                    data={items}
+                    renderItem={({ item }) => <TaskCard task={item} />}
+                    keyExtractor={(index) => index.toString()}
+                />
+            ) : (
+                <Text style={styles.emptyTaskList}>There's no tasks yet. Let's create one.</Text>
+            )}
 
             <Pressable style={styles.btn} onPress={() => setIsModalVisible(true)}>
                 <Text style={styles.btnTitle}>+</Text>
@@ -101,5 +109,13 @@ const styles = StyleSheet.create({
         textAlign: "center",
         verticalAlign: "middle",
         color: "white",
+    },
+
+    emptyTaskList: {
+        flex: 1,
+        fontSize: 20,
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });

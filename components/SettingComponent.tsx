@@ -1,10 +1,33 @@
+import { useEffect, useState } from "react";
 import { View, Text, Switch } from "react-native";
+import { settingParams } from "../db/schema";
+import { getSettingParam, updateSettingParam } from "../db/settingParamsService";
 
-export default function SettingComponent({ title }: SettingTypeComponentProps) {
+type SettingComponentProps = {
+    settingParam: {
+        id: number;
+        name: string;
+        status: number;
+    };
+};
+
+export default function SettingComponent({ settingParam }: SettingComponentProps) {
+    const [status, setStatus] = useState<boolean>(!!settingParam.status);
+
+    const onStatusChangeHandler = async () => {
+        setStatus(!status); // Оновлення статусу
+        await updateSettingParam(settingParam!.id, !status);
+    };
+
     return (
         <View>
-            <Text>{title}</Text>
-            <Switch />
+            <Text>{settingParam.name}</Text>
+            <Switch
+                onChange={() => {
+                    onStatusChangeHandler();
+                }}
+                value={status}
+            />
         </View>
     );
 }

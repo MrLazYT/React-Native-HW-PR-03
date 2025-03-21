@@ -1,9 +1,14 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import { Task } from "../App";
 import { useState } from "react";
+import { updateTask } from "../db/tasksService";
 
 export default function TaskCard({ task }: any) {
     const [isCompleted, setIsCompleted] = useState(task.completed);
+
+    const completeHandle = () => {
+        setIsCompleted(!isCompleted);
+        updateTask(task.id, !isCompleted);
+    };
 
     return (
         <View>
@@ -16,7 +21,7 @@ export default function TaskCard({ task }: any) {
                         : styles.container2
                 }
                 onPress={() => {
-                    setIsCompleted(!isCompleted);
+                    completeHandle();
                 }}
             >
                 {isCompleted ? <Text style={styles.textChecked}>✔</Text> : <Text>⠀⠀</Text>}
