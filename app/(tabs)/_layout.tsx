@@ -12,7 +12,18 @@ export default function TabLayout() {
     const notifications = useAppSelector(selectNotifications);
 
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: "#3255f0" }}>
+        <Tabs
+            screenOptions={{
+                headerShown: false,
+                tabBarActiveTintColor: "#3255f0",
+                tabBarStyle: {
+                    position: "absolute",
+                    height: 60,
+                    backgroundColor: "white",
+                    borderTopWidth: 0,
+                    elevation: 0,
+                },
+            }}>
             <Tabs.Screen
                 name="index"
                 options={{
@@ -21,6 +32,7 @@ export default function TabLayout() {
                     tabBarBadge: notifications === 0 ? undefined : notifications,
                 }}
             />
+
             <Tabs.Screen
                 name="settings"
                 options={{

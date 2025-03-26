@@ -1,5 +1,5 @@
 import { View, StyleSheet, FlatList } from "react-native";
-import SettingComponent from "../../components/SettingComponent";
+import SettingComponent from "../../components/settings/SettingComponent";
 import { useEffect, useState } from "react";
 import { getSettingParams, init } from "../../db/settingParamsService";
 import { settingParams } from "../../db/schema";

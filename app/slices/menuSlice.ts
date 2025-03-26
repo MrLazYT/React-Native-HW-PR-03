@@ -20,13 +20,16 @@ export const menuSlice = createSlice({
             if (state.notifications <= 0) return;
             state.notifications -= 1;
         },
+        clear: (state) => {
+            state.notifications = 0;
+        },
     },
     selectors: {
         selectNotifications: (x) => x.notifications,
     },
 });
 
-export const { plus, minus } = menuSlice.actions;
+export const { plus, minus, clear } = menuSlice.actions;
 export const { selectNotifications } = menuSlice.selectors;
 
 export default menuSlice.reducer;

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, Text, Switch } from "react-native";
-import { settingParams } from "../db/schema";
-import { getSettingParam, updateSettingParam } from "../db/settingParamsService";
+import { updateSettingParam } from "../../db/settingParamsService";
 
 type SettingComponentProps = {
     settingParam: {

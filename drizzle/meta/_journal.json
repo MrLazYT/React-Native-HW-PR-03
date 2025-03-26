@@ -15,6 +15,13 @@
       "when": 1742568251328,
       "tag": "0001_bitter_thunderball",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1742840813613,
+      "tag": "0002_cool_skaar",
+      "breakpoints": true
     }
   ]
 }

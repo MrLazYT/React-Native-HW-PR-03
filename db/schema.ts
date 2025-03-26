@@ -5,6 +5,7 @@ export const tasks = sqliteTable("tasks", {
     todo: text().notNull(),
     completed: int().notNull(),
     priority: int().notNull(),
+    notificationId: text(),
 });
 
 export const settingParams = sqliteTable("settingParams", {
