@@ -48,6 +48,14 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
                 }}
             />
+
+            <Tabs.Screen
+                name="gesture"
+                options={{
+                    title: "Gesture",
+                    tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
+                }}
+            />
         </Tabs>
     );
 }
