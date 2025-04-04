@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 export default function App() {
     const offset = useSharedValue({ x: 0, y: 0 });
@@ -22,8 +22,8 @@ export default function App() {
         })
         .onEnd(() => {
             offset.value = {
-                x: withTiming(0, { duration: 300 }),
-                y: withTiming(0, { duration: 300 }),
+                x: withDelay(Math.max(offset.value.x, offset.value.x * -1) * 5, withTiming(0, { duration: 300 })),
+                y: withDelay(Math.max(offset.value.x, offset.value.x * -1) * 5, withTiming(0, { duration: 300 })),
             };
         });
 
