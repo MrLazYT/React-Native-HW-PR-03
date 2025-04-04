@@ -1,46 +1,24 @@
 import { tasks } from "../../db/schema";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { useNavigation } from "expo-router";
-import { clear, plus } from "../slices/menuSlice";
+import { useState } from "react";
+import { plus } from "../slices/menuSlice";
 import MigrationError from "../../components/migrations/MigrationError";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import CreateTaskModal from "../../components/modalTabs/CreateTaskModal";
 import CreateButton from "../../components/buttons/CreateButton";
 import MigrationLoading from "../../components/migrations/MigrationLoading";
 import TaskListOrEmptyText from "../../components/tasks/TaskListOrEmptyText";
-import { addTask, getTasks, useDatabase } from "../../db/tasksService";
+import { addTask, useDatabase } from "../../db/tasksService";
+import useTasks from "../../hooks/useTasksHook";
+import useUpdateItems from "../../hooks/useUpdateItemsHook";
 
 export default function Settings() {
     const { success, error } = useDatabase();
-    const [items, setItems] = useState<(typeof tasks.$inferSelect)[] | null>(null);
+    const items = useTasks();
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const navigation = useNavigation();
-    const isFocused = navigation.isFocused();
 
-    async function update() {
-        const taskList = await getTasks();
-
-        setItems(taskList);
-    }
-
-    function updateUncompletedTaskCount() {
-        dispatch(clear());
-
-        for (let task of items!) {
-            if (task.completed !== 1) {
-                dispatch(plus());
-            }
-        }
-    }
-
-    useEffect(() => {
-        (async () => {
-            await update();
-            updateUncompletedTaskCount();
-        })();
-    }, [isFocused]);
+    useUpdateItems(items!, (item: typeof tasks.$inferSelect) => item.completed !== 1);
 
     if (error) {
         return <MigrationError error={error} />;
@@ -51,7 +29,6 @@ export default function Settings() {
 
     const addTaskHandler = async (task: typeof tasks.$inferSelect) => {
         await addTask(task);
-        await update();
 
         dispatch(plus());
     };
