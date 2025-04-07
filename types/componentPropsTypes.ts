@@ -29,3 +29,9 @@ type FormElementProps = {
     name?: string;
     placeholder?: string;
 };
+
+type CreateTaskModalProps = {
+    onClose: () => void;
+    onAddTask: (task: Task) => Promise<void>;
+    isVisible?: boolean;
+};

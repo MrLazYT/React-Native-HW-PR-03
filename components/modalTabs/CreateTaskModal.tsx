@@ -5,7 +5,7 @@ import PriorityPicker from "../formElements/PriorityPicker";
 import { Modal, Text, StyleSheet, View, Alert } from "react-native";
 import { notificationService } from "../../services/notificationService";
 
-export default function CreateTaskModal({ onClose, onAddTask, isVisible = false }: any) {
+export default function CreateTaskModal({ onClose, onAddTask, isVisible = false }: CreateTaskModalProps) {
     const { control, handleSubmit } = useForm({
         defaultValues: {
             id: 0,
