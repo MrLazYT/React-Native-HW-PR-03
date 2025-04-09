@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function PrimaryButton({ title, onPress }: CustomButtonProps) {
+export default function PrimaryButton({ testID, title, onPress }: CustomButtonProps) {
     return (
-        <Pressable style={styles.container} onPress={onPress}>
+        <Pressable testID={testID} style={styles.container} onPress={onPress}>
             <Text style={styles.text}>{title}</Text>
         </Pressable>
     );

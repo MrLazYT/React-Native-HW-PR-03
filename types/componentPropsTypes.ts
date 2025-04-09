@@ -12,6 +12,7 @@ type Task = {
 };
 
 type CustomButtonProps = {
+    testID?: string;
     title: string;
     onPress?: () => void;
 };

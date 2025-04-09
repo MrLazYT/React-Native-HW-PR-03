@@ -39,7 +39,7 @@ export default function CreateTaskModal({ onClose, onAddTask, isVisible = false 
                 <Text>Select priority:</Text>
                 <PriorityPicker control={control} />
 
-                <PrimaryButton title="Create Task" onPress={handleSubmit(onSubmit)} />
+                <PrimaryButton testID="notify-btn" title="Create Task" onPress={handleSubmit(onSubmit)} />
             </View>
         </Modal>
     );
