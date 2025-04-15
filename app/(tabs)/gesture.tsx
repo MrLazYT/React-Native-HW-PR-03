@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
@@ -30,9 +30,6 @@ export default function App() {
     return (
         <GestureDetector gesture={gesture}>
             <View style={styles.container}>
-                <Animated.View style={[styles.ball, animatedStyles]} />
-                <Animated.View style={[styles.ball, animatedStyles]} />
-                <Animated.View style={[styles.ball, animatedStyles]} />
                 <Animated.View style={[styles.ball, animatedStyles]} />
             </View>
         </GestureDetector>
